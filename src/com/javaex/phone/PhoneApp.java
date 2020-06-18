@@ -9,7 +9,7 @@ public class PhoneApp {
 		// TODO Auto-generated method stub
 		PhoneDao phonedao = new PhoneDao();
 		Scanner sc = new Scanner(System.in);
-		List<PersonVo> pList = phonedao.getPhoneList();
+
 
 		boolean run = true;
 		int phone_id;
@@ -19,10 +19,13 @@ public class PhoneApp {
 		System.out.println("*\t전화번호 관리 프로그램         *");
 		System.out.println("***************************");
 		while (run) {
+			List<PersonVo> pList = phonedao.getPhoneList();
 			System.out.println("\n1.리스트  2.등록  3.수정  4.삭제  5.검색  6.종료");
 			System.out.println("------------------------------------");
 			System.out.print(">메뉴 번호: ");
 			int num = sc.nextInt();
+			
+			
 			switch (num) {
 			case 1:
 				System.out.println("<1.리스트>");
@@ -44,7 +47,6 @@ public class PhoneApp {
 				// 등록하기
 				PersonVo v01 = new PersonVo(name, hp, company);
 				phonedao.PersonInsert(v01);
-				pList = phonedao.getPhoneList();
 				System.out.println("[1건 추가되었습니다.]");
 				break;
 
@@ -63,7 +65,6 @@ public class PhoneApp {
 				// 수정하기
 				PersonVo v02 = new PersonVo(phone_id, name, hp, company);
 				phonedao.PersonUpdate(v02);
-				pList = phonedao.getPhoneList();
 				System.out.println("1건 수정되었습니다.");
 				break;
 
@@ -75,26 +76,37 @@ public class PhoneApp {
 				// 삭제하기
 				PersonVo v03 = new PersonVo(phone_id);
 				phonedao.PersonDelete(v03);
-				pList = phonedao.getPhoneList();
 				System.out.println("1건 삭제되었습니다.");
 				break;
-
+				
 			case 5:
-				// .contains(search) 검색 명령어
-				System.out.println("<4.검색>");
+				
+				
+				System.out.println("<5.검색>");
 				System.out.print("검색어: ");
 				sc.nextLine();
 				String search = sc.nextLine();
 				//검색하기
-				for (int i = 0; i < pList.size(); i++) {
+				pList = phonedao.getPersonList(search);
+				for(PersonVo vo : pList) {
+    				System.out.println(vo.getPerson_id()+", "+vo.getName()+ ", " + vo.getHp() + ", " + vo.getCompany());
+    			}
+				
+				break;
+				
+				// .contains(search) 검색 명령어
+				/*for (int i = 0; i < pList.size(); i++) {
 					if (pList.get(i).getName().contains(search) || pList.get(i).getHp().contains(search)
 							|| pList.get(i).getCompany().contains(search)) {
 						System.out.println(pList.get(i).getPerson_id() + ".\t" + pList.get(i).getName() + "\t"
 								+ pList.get(i).getHp() + "\t" + pList.get(i).getCompany());
 					}
 				}
-				break;
 				
+				*/
+				
+				
+
 			case 6:
 				System.out.println("***************************");
 				System.out.println("*\t        감사합니다                 *");
