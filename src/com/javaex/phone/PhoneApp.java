@@ -10,30 +10,30 @@ public class PhoneApp {
 		PhoneDao phonedao = new PhoneDao();
 		Scanner sc = new Scanner(System.in);
 
-
-		boolean run = true;
+		boolean exit = true;
 		int phone_id;
 		String name, hp, company;
 
 		System.out.println("***************************");
 		System.out.println("*\t전화번호 관리 프로그램         *");
 		System.out.println("***************************");
-		while (run) {
+
+		while (exit) {
 			List<PersonVo> pList = phonedao.getPhoneList();
 			System.out.println("\n1.리스트  2.등록  3.수정  4.삭제  5.검색  6.종료");
 			System.out.println("------------------------------------");
 			System.out.print(">메뉴 번호: ");
 			int num = sc.nextInt();
-			
-			
+
 			switch (num) {
 			case 1:
 				System.out.println("<1.리스트>");
-				for (PersonVo vo : pList) {
+				for (PersonVo vo : pList) { // (대입받을 변수 : 배열명)
 					System.out.println(
 							vo.getPerson_id() + "\t" + vo.getName() + "\t" + vo.getHp() + "\t" + vo.getCompany());
 				}
 				break;
+
 			case 2:
 				System.out.println("<2.등록>");
 				sc.nextLine();// 오류를 계행을 받아 해결
@@ -78,46 +78,44 @@ public class PhoneApp {
 				phonedao.PersonDelete(v03);
 				System.out.println("1건 삭제되었습니다.");
 				break;
-				
+
 			case 5:
-				
-				
 				System.out.println("<5.검색>");
 				System.out.print("검색어: ");
 				sc.nextLine();
 				String search = sc.nextLine();
-				//검색하기
+
+				// 검색하기
 				pList = phonedao.getPersonList(search);
-				for(PersonVo vo : pList) {
-    				System.out.println(vo.getPerson_id()+", "+vo.getName()+ ", " + vo.getHp() + ", " + vo.getCompany());
-    			}
-				
-				break;
-				
-				// .contains(search) 검색 명령어
-				/*for (int i = 0; i < pList.size(); i++) {
-					if (pList.get(i).getName().contains(search) || pList.get(i).getHp().contains(search)
-							|| pList.get(i).getCompany().contains(search)) {
-						System.out.println(pList.get(i).getPerson_id() + ".\t" + pList.get(i).getName() + "\t"
-								+ pList.get(i).getHp() + "\t" + pList.get(i).getCompany());
-					}
+				for (PersonVo vo : pList) { // (대입받을 변수 : 배열명)
+					System.out.println(
+							vo.getPerson_id() + ", " + vo.getName() + ", " + vo.getHp() + ", " + vo.getCompany());
 				}
-				
-				*/
-				
-				
+				break;
+
+			// .contains(search) 검색 명령어
+			/*
+			 * for (int i = 0; i < pList.size(); i++) { if
+			 * (pList.get(i).getName().contains(search) ||
+			 * pList.get(i).getHp().contains(search) ||
+			 * pList.get(i).getCompany().contains(search)) {
+			 * System.out.println(pList.get(i).getPerson_id() + ".\t" +
+			 * pList.get(i).getName() + "\t" + pList.get(i).getHp() + "\t" +
+			 * pList.get(i).getCompany()); } }
+			 * 
+			 */
 
 			case 6:
 				System.out.println("***************************");
 				System.out.println("*\t        감사합니다                 *");
 				System.out.println("***************************");
-				run = false;
+				exit = false;
 				break;
-				
+
 			default:
 				System.out.println("[다시 입력해주세요.]");
 				break;
-				
+
 			}
 
 		}

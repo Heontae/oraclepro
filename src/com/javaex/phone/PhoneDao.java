@@ -126,67 +126,37 @@ public class PhoneDao {
 
 	// ********** 리스트 **********
 	public List<PersonVo> getPhoneList() {
-		// 리스트 준비
-		List<PersonVo> phonelist = new ArrayList<PersonVo>();
-
-		try {
-			// connect정보 얻어오기
-			getConnect();
-
-			// 3. SQL문 준비 / 바인딩 / 실행
-			String query = "select 	p.person_id,";
-			query += "				p.name,";
-			query += "				p.hp,";
-			query += "				p.company";
-			query += "		from	person p";
-
-			pstmt = conn.prepareStatement(query);
-
-			rs = pstmt.executeQuery();
-			// 4.결과처리
-
-			while (rs.next()) {
-				int personid = rs.getInt("person_id");
-				String name = rs.getString("name");
-				String hp = rs.getString("hp");
-				String company = rs.getString("company");
-
-				// 리스트에 담기
-				PersonVo personVo = new PersonVo(personid, name, hp, company);
-				phonelist.add(personVo); // 데이터를 리스트에 담아두기
-			}
-
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		}
-		// 자원정리
-		close();
-
-		return phonelist; // 리스트에 담겨있는 데이터를 모두 리턴
+		return getPersonList("");
 	}
 
+	// ********** 리스트(검색하기) **********
 	public List<PersonVo> getPersonList(String search) {
 		getConnect();
 		List<PersonVo> phonelist = new ArrayList<PersonVo>();
 
 		try {
-			String query = "select 	p.person_id,";
-			query += "				p.name,";
-			query += "				p.hp,";
-			query += "				p.company";
-			query += "		from	person p";
-			query += "		where 	name like ?";
-			query += "		or		hp	like	?";
-			query += "		or		company	like	?";
+			String query = "select 	person_id,";
+			query += "				name,";
+			query += "				hp,";
+			query += "				company";
+			query += "		from	person";
 
-			pstmt = conn.prepareStatement(query);
-			
-			search = "%" + search + "%";
-			
-			pstmt.setString(1, search);
-			pstmt.setString(2, search);
-			pstmt.setString(3, search);
-			
+			if (search != "" || search == null) { // 파라미터가 공백이 아니거나 null값이 아니면
+				query += "		where 	name like ?";
+				query += "		or		hp	like	?";
+				query += "		or		company	like	?";
+				query += "		order by	person_id asc";
+
+				pstmt = conn.prepareStatement(query);
+
+				pstmt.setString(1, '%' + search + '%');
+				pstmt.setString(2, '%' + search + '%');
+				pstmt.setString(3, '%' + search + '%');
+
+			} else {
+				pstmt = conn.prepareStatement(query);
+			}
+
 			rs = pstmt.executeQuery();
 			// 4.결과처리
 			while (rs.next()) {
@@ -204,7 +174,6 @@ public class PhoneDao {
 		}
 
 		close();
-
 		return phonelist;
 	}
 
